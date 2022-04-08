@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 function RequireAuth(props) {
   const [hasAccess, setHasAccess] = useState(null);
+  // const [testToggle, setTestToggle] = useState(false); //++
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("useEffect called on RequireAuth");
     const checkAccess = async () => {
       const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
@@ -30,11 +32,18 @@ function RequireAuth(props) {
       }
     };
     checkAccess();
-  }, [navigate, props]);
+  }, [navigate, props.pageKey]);
+  /* Note: 
+  The navigate() being in dependency array does not cause useEffect to be called on every render.
+  I'm not sure why, since useNavigate hook will be called on every render. (needs further investigation)
+  To test this, uncomment lines marked with `//++` at the end.
+  and comment lines with `//+` at the end.
+  */
 
-  console.log("hasAccess", hasAccess);
+  console.log("on render - hasAccess", hasAccess);
   if (hasAccess === true) {
-    return props.children;
+    // return (<><p>{testToggle.toString()}</p><button onClick={() => {setTestToggle(!testToggle)}}>Toggle</button><div>{props.children}</div></>); //++
+    return props.children; //+
   } else if (hasAccess === false) {
     return <h1>Permission Denied</h1>;
   }
