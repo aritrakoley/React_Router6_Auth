@@ -35,7 +35,7 @@ const Login = () => {
     if (ok) {
       switch (response.status) {
         case 200:
-          localStorage.setItem(response.data.accessToken);
+          localStorage.setItem("accessToken", response.data.accessToken);
           console.log("Login: ", { location });
           navigate(`${location.state.from.pathname}`, { replace: true });
           break;

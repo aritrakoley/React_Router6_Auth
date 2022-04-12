@@ -5,7 +5,6 @@ import handlePromise from "../util/handlePromise";
 
 const FinDash = () => {
   const [posts, setPosts] = useState([]);
-  // const [err, setErr] = useState(null);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -46,7 +45,6 @@ const FinDash = () => {
     <div style={containerStyle}>
       <h3>Finance Dashboard</h3>
       {posts ? <p>{JSON.stringify(posts)}</p> : null}
-      {/* {err ? <p>{err}</p> : null} */}
     </div>
   );
 };

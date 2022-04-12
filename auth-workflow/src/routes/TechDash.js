@@ -5,14 +5,13 @@ import handlePromise from "../util/handlePromise";
 
 const TechDash = () => {
   const [posts, setPosts] = useState([]);
-  // const [err, setErr] = useState(null);
 
   useEffect(() => {
     const getPosts = async () => {
       const accessToken = localStorage.getItem("accessToken");
       const { ok, error, response } = await handlePromise(
         axios.post(
-          "/finposts",
+          "/techposts",
           {},
           {
             headers: {
@@ -46,7 +45,6 @@ const TechDash = () => {
     <div style={containerStyle}>
       <h3>Technology Dashboard</h3>
       {posts ? <p>{JSON.stringify(posts)}</p> : null}
-      {/* {err? <p>{err}</p> : null} */}
     </div>
   );
 };
