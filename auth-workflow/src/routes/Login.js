@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import containerStyle from "../util/containerStyle";
+import axios from "../axios/localServer.axios";
+import handlePromise from "../util/handlePromise";
 
 const Login = () => {
-  const containerStyle = {
-    height: "80vh",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  };
   const itemStyle = { margin: "1rem" };
 
   const [formData, setFormData] = useState({
-    username: "aritra",
+    username: "fin or tech",
     password: "password",
   });
 
@@ -29,26 +25,29 @@ const Login = () => {
 
   const handleLogin = async () => {
     setLoginFailed(false);
-    console.log(formData);
+    console.log("Login: ", formData);
     let accessToken = "";
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (res.status === 400) {
-        setLoginFailed(true);
-      } else {
-        accessToken = ( await res.json() ).accessToken;
-        localStorage.setItem("accessToken", accessToken);
-        console.log("in handleLogin", {location});
-        navigate(`${location.state.from.pathname}`, {replace: true});
+
+    const { ok, error, response } = await handlePromise(
+      axios.post("/login", formData)
+    );
+
+    if (ok) {
+      switch (response.status) {
+        case 200:
+          localStorage.setItem(response.data.accessToken);
+          console.log("Login: ", { location });
+          navigate(`${location.state.from.pathname}`, { replace: true });
+          break;
+        case 400:
+          setLoginFailed(true);
+          break;
+        default: ;
       }
-      console.log(accessToken);
-    } catch {
-      console.log("Request Failed");
+    } else {
+      console.log("Login: ", {error});
     }
+    console.log("Login: ", { accessToken });
   };
 
   return (

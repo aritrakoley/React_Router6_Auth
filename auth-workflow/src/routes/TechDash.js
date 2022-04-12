@@ -1,38 +1,41 @@
 import { useEffect, useState } from "react";
+import containerStyle from "../util/containerStyle";
+import axios from "../axios/localServer.axios";
+import handlePromise from "../util/handlePromise";
 
 const TechDash = () => {
   const [posts, setPosts] = useState([]);
-  const [err, setErr] = useState(null);
-  const containerStyle = {
-    height: "80vh",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  };
+  // const [err, setErr] = useState(null);
 
   useEffect(() => {
     const getPosts = async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken")
-        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/techposts`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: accessToken ? accessToken : '',
-          },
-        });
-        console.log(res);
-        if (res.status === 401 || res.status === 403) {
-          console.log("Auth error");
-          const msg = (await res.json()).msg;
-          setErr(msg);
-        } else {
-          const posts = await res.json();
-          setPosts(posts);
+      const accessToken = localStorage.getItem("accessToken");
+      const { ok, error, response } = await handlePromise(
+        axios.post(
+          "/finposts",
+          {},
+          {
+            headers: {
+              Authorization: accessToken ? accessToken : "",
+            },
+          }
+        )
+      );
+
+      console.log("TechDash: ", { ok, error, response });
+      if (ok) {
+        switch (response.status) {
+          case 401:
+          case 403:
+            console.log("TechDash: Auth error msg -> ", response.data.msg);
+            break;
+          case 200:
+            setPosts(response.data);
+            break;
+          default:
         }
-      } catch {
-        console.log("Request Failed");
+      } else {
+        console.log("TechDash: fetching posts failed", { error });
       }
     };
 
@@ -42,8 +45,8 @@ const TechDash = () => {
   return (
     <div style={containerStyle}>
       <h3>Technology Dashboard</h3>
-      {!err? <p>{JSON.stringify(posts)}</p> : null}
-      {err? <p>{err}</p> : null}
+      {posts ? <p>{JSON.stringify(posts)}</p> : null}
+      {/* {err? <p>{err}</p> : null} */}
     </div>
   );
 };
