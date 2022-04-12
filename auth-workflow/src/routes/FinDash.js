@@ -8,18 +8,7 @@ const FinDash = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      const { ok, error, response } = await handlePromise(
-        axios.post(
-          "/finposts",
-          {},
-          {
-            headers: {
-              Authorization: accessToken ? accessToken : "",
-            },
-          }
-        )
-      );
+      const { ok, error, response } = await handlePromise( axios.post("/finposts") );
 
       console.log("FinDash: ", { ok, error, response });
       if (ok) {

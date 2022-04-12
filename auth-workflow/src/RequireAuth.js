@@ -18,17 +18,7 @@ function RequireAuth(props) {
 
       if (accessToken) {
 
-        const {ok, error, response} = await handlePromise(
-          axios.post(
-            "/pageaccess",
-            { pageKey: props.pageKey },
-            {
-              headers: {
-                Authorization: accessToken ? accessToken : "",
-              },
-            }
-          )
-        );
+        const {ok, error, response} = await handlePromise( axios.post( "/pageaccess",{ pageKey: props.pageKey } ) );
         console.log("RequireAuth: ",{ok, error, response});
 
         if (ok) {

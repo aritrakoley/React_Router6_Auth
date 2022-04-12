@@ -26,7 +26,6 @@ const Login = () => {
   const handleLogin = async () => {
     setLoginFailed(false);
     console.log("Login: ", formData);
-    let accessToken = "";
 
     const { ok, error, response } = await handlePromise(
       axios.post("/login", formData)
@@ -47,7 +46,7 @@ const Login = () => {
     } else {
       console.log("Login: ", {error});
     }
-    console.log("Login: ", { accessToken });
+    console.log("Login: ", { ok, error, response });
   };
 
   return (

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./routes/Layout";
 import Login from "./routes/Login";
@@ -6,7 +7,11 @@ import FinDash from "./routes/FinDash";
 import TechDash from "./routes/TechDash";
 import RequireAuth from "./RequireAuth";
 
-function App() {
+const App = () => {
+  useEffect(() => {
+    console.log("App: useEffect called");
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -32,6 +37,6 @@ function App() {
       </Route>
     </Routes>
   );
-}
+};
 
 export default App;

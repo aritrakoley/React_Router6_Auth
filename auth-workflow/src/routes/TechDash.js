@@ -8,18 +8,7 @@ const TechDash = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      const { ok, error, response } = await handlePromise(
-        axios.post(
-          "/techposts",
-          {},
-          {
-            headers: {
-              Authorization: accessToken ? accessToken : "",
-            },
-          }
-        )
-      );
+      const { ok, error, response } = await handlePromise( axios.post("/techposts") );
 
       console.log("TechDash: ", { ok, error, response });
       if (ok) {
