@@ -1,20 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Landing(props) {
+  const navigate = useNavigate();
+
+  const containerStyle = {
+    height: "80vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
   return (
-    <>
-      <h1>Welcome {props.user || "Guest"}</h1>{" "}
-      <button
-        onClick={() => {
-          localStorage.setItem("accessToken", "");
-        }}
-      >
-        Logout
-      </button> <br />
+    <div style={containerStyle}>
+      <h1>Landing Page (public)</h1>
       <Link to="/findash">Finance Dashboard</Link>
-      <br />
       <Link to="/techdash">Technology Dashboard</Link>
-    </>
+      {localStorage.getItem("accessToken") ? (
+        <button
+          onClick={() => {
+            localStorage.setItem("accessToken", "");
+            navigate("/");
+          }}
+        >
+          Logout
+        </button>
+      ) : null}
+    </div>
   );
 }
 

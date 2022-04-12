@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const containerStyle = {
@@ -19,6 +19,7 @@ const Login = () => {
   const [loginFailed, setLoginFailed] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (e) => {
     setFormData((prevState) => {
@@ -41,7 +42,8 @@ const Login = () => {
       } else {
         accessToken = ( await res.json() ).accessToken;
         localStorage.setItem("accessToken", accessToken);
-        navigate('/');
+        console.log("in handleLogin", {location});
+        navigate(`${location.state.from.pathname}`, {replace: true});
       }
       console.log(accessToken);
     } catch {
