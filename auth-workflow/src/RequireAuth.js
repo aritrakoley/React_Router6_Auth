@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function RequireAuth(props) {
   const [hasAccess, setHasAccess] = useState(null);
   // const [testToggle, setTestToggle] = useState(false); //++
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     console.log("useEffect called on RequireAuth");
@@ -28,11 +29,12 @@ function RequireAuth(props) {
           setHasAccess(hA);
         }
       } else {
-        navigate("/login");
+        console.log("in RequireAuth", {location});
+        navigate("/login", {state: { from: location}, replace: true });
       }
     };
     checkAccess();
-  }, [navigate, props.pageKey]);
+  }, [navigate, location, props.pageKey]);
   /* Note: 
   The navigate() being in dependency array does not cause useEffect to be called on every render.
   I'm not sure why, since useNavigate hook will be called on every render. (needs further investigation)
