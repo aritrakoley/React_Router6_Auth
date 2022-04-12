@@ -1,15 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
+import containerStyle from "../util/containerStyle";
 
 function Landing(props) {
   const navigate = useNavigate();
-
-  const containerStyle = {
-    height: "80vh",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  };
 
   return (
     <div style={containerStyle}>

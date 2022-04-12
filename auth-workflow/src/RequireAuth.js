@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "./axios/localServer.axios.js";
+import handlePromise from "./util/handlePromise.js";
 
 function RequireAuth(props) {
   const [hasAccess, setHasAccess] = useState(null);
@@ -8,41 +10,42 @@ function RequireAuth(props) {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("useEffect called on RequireAuth");
+    console.log('RequireAuth: useEffect called');
+
     const checkAccess = async () => {
       const accessToken = localStorage.getItem("accessToken");
+      console.log(`RequireAuth: token -> ${accessToken}`);
+
       if (accessToken) {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/pageaccess`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: accessToken ? accessToken : "",
-            },
-            body: JSON.stringify({ pageKey: props.pageKey }),
+
+        const {ok, error, response} = await handlePromise( axios.post( "/pageaccess",{ pageKey: props.pageKey } ) );
+        console.log("RequireAuth: ",{ok, error, response});
+
+        if (ok) {
+          switch ( response.status ) {
+            case 200: setHasAccess(response.data.hasAccess); break;
+            default: ;
           }
-        );
-        console.log(res);
-        if (res.status === 200) {
-          const hA = (await res.json()).hasAccess;
-          setHasAccess(hA);
-        }
+        } else {
+          console.log("RequireAuth: checkAccess api call failed", error);
+        } 
+
       } else {
-        console.log("in RequireAuth", {location});
-        navigate("/login", {state: { from: location}, replace: true });
+        console.log("RequireAuth: Location sent", { location });
+        navigate("/login", { state: { from: location }, replace: true });
       }
     };
+
     checkAccess();
   }, [navigate, location, props.pageKey]);
   /* Note: 
-  The navigate() being in dependency array does not cause useEffect to be called on every render.
+  The navigate() and location constants being in dependency array does not cause useEffect to be called on every render.
   I'm not sure why, since useNavigate hook will be called on every render. (needs further investigation)
   To test this, uncomment lines marked with `//++` at the end.
   and comment lines with `//+` at the end.
   */
 
-  console.log("on render - hasAccess", hasAccess);
+  console.log("RequireAuth: rendered, hasAccess", hasAccess);
   if (hasAccess === true) {
     // return (<><p>{testToggle.toString()}</p><button onClick={() => {setTestToggle(!testToggle)}}>Toggle</button><div>{props.children}</div></>); //++
     return props.children; //+
