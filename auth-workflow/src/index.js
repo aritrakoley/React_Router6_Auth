@@ -3,14 +3,14 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import './axios/localServer.axios.inteceptors';
-
+import InterceptorInitializer from "./components/InterceptorInitializer";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
+  <BrowserRouter>
+    <InterceptorInitializer />
+    <React.StrictMode>
       <App />
-    </BrowserRouter>
-  </React.StrictMode>,
+    </React.StrictMode>
+  </BrowserRouter>,
   document.getElementById("root")
 );
