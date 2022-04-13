@@ -5,11 +5,11 @@ import Login from "./routes/Login";
 import Landing from "./routes/Landing";
 import FinDash from "./routes/FinDash";
 import TechDash from "./routes/TechDash";
-import RequireAuth from "./RequireAuth";
+import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
   useEffect(() => {
-    console.log("App: useEffect called");
+    console.log("App: useEffect called => first render complete");
   }, []);
 
   return (

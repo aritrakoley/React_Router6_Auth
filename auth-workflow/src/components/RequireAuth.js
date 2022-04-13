@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "./axios/localServer.axios.js";
-import handlePromise from "./util/handlePromise.js";
+import axios from "../axios/localServer.axios.js";
+import handlePromise from "../util/handlePromise.js";
 
 function RequireAuth(props) {
   const [hasAccess, setHasAccess] = useState(null);
@@ -27,7 +27,7 @@ function RequireAuth(props) {
             default: ;
           }
         } else {
-          console.log("RequireAuth: checkAccess api call failed", error);
+          console.log("RequireAuth: /pageaccess api call failed", error);
         } 
 
       } else {
